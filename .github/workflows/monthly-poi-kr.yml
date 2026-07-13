@@ -1,0 +1,74 @@
+name: Monthly All the Places KR build
+
+on:
+  schedule:
+    - cron: "0 18 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: alltheplaces-kr-monthly
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: upstream/alltheplaces/uv.lock
+      - name: Install pinned ATP dependencies
+        run: uv sync --project upstream/alltheplaces --all-groups --locked
+      - name: Validate Korea overlay
+        env:
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/upstream/alltheplaces
+        run: |
+          uv run --project upstream/alltheplaces python -m pytest tests
+          uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_run_monthly.py --list-only
+      - name: Crawl Korea allowlist and assemble dist
+        env:
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/upstream/alltheplaces
+        run: uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_run_monthly.py
+      - name: Validate monthly bundle
+        env:
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/upstream/alltheplaces
+        run: uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_build_latest.py --validate-only
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - run: corepack enable
+      - run: pnpm --dir web install --frozen-lockfile
+      - run: pnpm --dir web build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: monthly-dist
+          path: dist/latest
+          retention-days: 90
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+

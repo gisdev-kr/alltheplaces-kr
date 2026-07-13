@@ -1,0 +1,5 @@
+[submodule "upstream/alltheplaces"]
+	path = upstream/alltheplaces
+	url = https://github.com/alltheplaces/alltheplaces.git
+	branch = master
+

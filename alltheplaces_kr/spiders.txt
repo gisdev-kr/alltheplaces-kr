@@ -1,0 +1,16 @@
+# Official alltheplaces/alltheplaces spiders whose filenames and spider names end in _kr.
+# Keep this list explicit so upstream additions are reviewed before entering the monthly build.
+burger_king_kr
+costco_kr
+five_guys_kr
+gscaltex_kr
+hollys_coffee_kr
+hyundai_kr
+kia_kr
+paris_baguette_kr
+pizza_hut_kr
+ssangyong_kr
+subway_kr
+sulbing_kr
+tyremore_kr
+

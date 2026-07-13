@@ -1,0 +1,4 @@
+interface Props {brands:string[];spiders:string[];statuses:string[];brand:string;spider:string;status:string;onBrand:(v:string)=>void;onSpider:(v:string)=>void;onStatus:(v:string)=>void}
+function Select({label,value,options,onChange}:{label:string;value:string;options:string[];onChange:(v:string)=>void}){return <label><span>{label}</span><select value={value} onChange={e=>onChange(e.target.value)}><option value="">전체</option>{options.map(option=><option key={option}>{option}</option>)}</select></label>}
+export function Filters(props:Props){return <div className="filters"><Select label="브랜드" value={props.brand} options={props.brands} onChange={props.onBrand}/><Select label="Spider" value={props.spider} options={props.spiders} onChange={props.onSpider}/><Select label="OSM 검토 상태" value={props.status} options={props.statuses} onChange={props.onStatus}/></div>}
+
