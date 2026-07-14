@@ -1,0 +1,5 @@
+---
+title: CU 편의점 위치 데이터 | All the Places KR
+description: CU 한국 편의점 위치 데이터의 OSM/NSI schema, 품질 지표와 다운로드 준비 현황을 제공합니다.
+brand_slug: cu
+---

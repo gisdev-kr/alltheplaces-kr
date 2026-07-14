@@ -1,0 +1,22 @@
+---
+layout: alltheplaces
+title: NSI KR Category Coverage | All the Places KR
+description: NSI의 한국 영업 범위를 기준으로 All the Places spider 지원 현황을 category별로 비교합니다.
+permalink: /categories/
+---
+{% assign coverage = site.data.alltheplaces.coverage | sort: 'priority' %}
+<header class="page-hero portal-container"><p class="eyebrow">NSI KR COVERAGE</p><h1>Category coverage</h1><p>Name Suggestion Index에서 국가 코드 KR에 해당하는 브랜드와 upstream All the Places spider 지원 범위를 비교합니다. 현재 값은 자동 생성으로 이전하기 위한 초기 구조화 데이터입니다.</p><div class="hero-actions"><a class="button primary" href="{{ '/map/' | relative_url }}">한국 POI 지도 보기</a><a class="button" href="{{ '/database/' | relative_url }}">데이터 다운로드</a></div></header>
+
+<section class="portal-section portal-container">
+  <div class="section-heading"><div><p class="eyebrow">{{ coverage.size }} CATEGORIES</p><h2>지원 범위</h2></div><span class="updated-label">with spider / total NSI KR</span></div>
+  <div class="coverage-table" role="table" aria-label="NSI KR category coverage">
+    {% for item in coverage %}
+      {% assign rate = item.with_spider | times: 100.0 | divided_by: item.total_nsi | round: 1 %}
+      <article class="coverage-row" id="{{ item.slug }}" role="row"><div><span class="category-label">{{ item.label_ko }}</span><small>{{ item.label_en }}</small></div><code>{{ item.path }}</code><strong>{{ item.with_spider }} / {{ item.total_nsi }}</strong><div><div class="coverage-meter"><span style="width:{{ rate }}%"></span></div><small>{{ rate }}%</small></div>{% if item.page_ready %}<a href="{{ item.url | relative_url }}">{{ item.label_ko }} POI 데이터 보기 →</a>{% else %}<span class="pending">상세 페이지 준비 중</span>{% endif %}</article>
+    {% endfor %}
+  </div>
+</section>
+
+{% include ad-slot.html %}
+
+<section class="portal-section portal-container"><div class="download-callout"><div><strong>NSI KR 자동 갱신 준비</strong><p>템플릿은 coverage 값을 직접 포함하지 않습니다. 향후 NSI 원본의 country code가 KR 또는 전 세계인 항목을 읽어 같은 data schema를 생성할 예정입니다.</p></div><a class="button" href="https://github.com/osmlab/name-suggestion-index">NSI 원본 저장소 ↗</a></div></section>

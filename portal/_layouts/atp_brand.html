@@ -1,0 +1,53 @@
+---
+layout: default
+---
+{% assign brand = site.data.alltheplaces.brands | where: 'slug', page.brand_slug | first %}
+<article class="report-page">
+  <header class="report-hero portal-container">
+    <p class="eyebrow">BRAND DATA REPORT · {{ brand.category_path }}</p>
+    <h1>{{ brand.name_ko }} <span>{{ brand.name }}</span></h1>
+    <p>{{ brand.summary }}</p>
+    <div class="status-badge">{{ brand.status }}</div>
+    <div class="hero-actions">
+      <a class="button primary" href="{{ '/map/' | append: '?brand=' | append: brand.map_query | relative_url }}">지도에서 {{ brand.name_ko }} POI 보기</a>
+      <a class="button" href="{{ brand.category_url | relative_url }}">{{ brand.category_path }} category 보기</a>
+    </div>
+  </header>
+
+  <section class="portal-section portal-container">
+    <div class="section-heading"><div><p class="eyebrow">KPI</p><h2>데이터 품질 요약</h2></div></div>
+    <div class="kpi-grid">
+      <div class="kpi"><span>수집 POI</span><strong>준비 중</strong></div>
+      <div class="kpi"><span>최근 업데이트</span><strong>준비 중</strong></div>
+      <div class="kpi"><span>좌표 보유율</span><strong>준비 중</strong></div>
+      <div class="kpi"><span>주소 보유율</span><strong>준비 중</strong></div>
+    </div>
+    <p class="source-note">검증된 월간 데이터에서 계산할 수 있을 때만 KPI를 표시합니다. placeholder에 임의 숫자를 사용하지 않습니다.</p>
+  </section>
+
+  <section class="portal-section portal-container split-section">
+    <div>
+      <div class="section-heading"><div><p class="eyebrow">SCHEMA</p><h2>OSM / NSI tags</h2></div></div>
+      <dl class="schema-list">
+        {% for tag in brand.osm_tags %}<div><dt>{{ tag.key }}</dt><dd>{{ tag.value }}</dd></div>{% endfor %}
+      </dl>
+    </div>
+    <div>
+      <div class="section-heading"><div><p class="eyebrow">MAP</p><h2>지도 미리보기</h2></div></div>
+      <a class="map-placeholder" href="{{ '/map/' | append: '?brand=' | append: brand.map_query | relative_url }}"><span>KR</span><strong>{{ brand.name_ko }} 위치를 지도에서 탐색</strong><small>인터랙티브 지도 열기 →</small></a>
+    </div>
+  </section>
+
+  {% include ad-slot.html %}
+
+  <section class="portal-section portal-container">
+    <div class="section-heading"><div><p class="eyebrow">DOWNLOADS & QUALITY</p><h2>다운로드와 검토 항목</h2></div></div>
+    <div class="quality-grid">
+      <div><strong>브랜드별 다운로드</strong><p>CSV·GeoJSON 분리 export 준비 중</p></div>
+      <div><strong>중복 의심</strong><p>월간 conflation 지표 연결 준비 중</p></div>
+      <div><strong>주소·좌표 누락</strong><p>필드 completeness 집계 준비 중</p></div>
+      <div><strong>폐점 가능성</strong><p>자동 import 없이 수동 검토</p></div>
+    </div>
+    <div class="related-links"><a href="{{ '/database/' | relative_url }}">전체 한국 POI 데이터 다운로드 →</a><a href="{{ brand.category_url | relative_url }}">같은 category 브랜드 보기 →</a></div>
+  </section>
+</article>

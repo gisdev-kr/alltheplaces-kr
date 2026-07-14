@@ -1,0 +1,49 @@
+---
+layout: default
+---
+{% assign coverage = site.data.alltheplaces.coverage | where: 'slug', page.coverage_slug | first %}
+{% assign related_brands = site.data.alltheplaces.brands | where: 'category', page.coverage_slug %}
+{% assign coverage_rate = coverage.with_spider | times: 100.0 | divided_by: coverage.total_nsi | round: 1 %}
+<article class="report-page">
+  <header class="report-hero portal-container">
+    <p class="eyebrow">CATEGORY REPORT · {{ coverage.path }}</p>
+    <h1>{{ page.title }}</h1>
+    <p>{{ page.description }}</p>
+    <div class="hero-actions">
+      <a class="button primary" href="{{ '/map/' | append: '?key=' | append: coverage.key | append: '&value=' | append: coverage.value | relative_url }}">지도에서 {{ coverage.label_ko }} POI 보기</a>
+      <a class="button" href="{{ '/database/' | relative_url }}">category 데이터 다운로드</a>
+    </div>
+  </header>
+
+  <section class="portal-section portal-container">
+    <div class="section-heading"><div><p class="eyebrow">COVERAGE</p><h2>NSI KR coverage</h2></div><a href="{{ '/categories/' | relative_url }}">전체 category coverage 보기 →</a></div>
+    <div class="kpi-grid compact">
+      <div class="kpi"><span>NSI path</span><strong class="code-value">{{ coverage.path }}</strong></div>
+      <div class="kpi"><span>Spider 지원</span><strong>{{ coverage.with_spider }} / {{ coverage.total_nsi }}</strong></div>
+      <div class="kpi"><span>Coverage</span><strong>{{ coverage_rate }}%</strong></div>
+      <div class="kpi"><span>갱신 방식</span><strong class="small-value">NSI KR 기준</strong></div>
+    </div>
+    <div class="coverage-meter large" aria-label="coverage {{ coverage_rate }}%"><span style="width:{{ coverage_rate }}%"></span></div>
+    <p class="source-note">초기 수치는 nsi.guide의 국가 코드 KR coverage를 구조화한 값입니다. 이후 NSI 원본 기반 자동 생성으로 교체할 수 있도록 data file에서 관리합니다.</p>
+  </section>
+
+  <section class="portal-section portal-container">
+    <div class="section-heading"><div><p class="eyebrow">BRANDS</p><h2>관련 브랜드</h2></div></div>
+    {% if related_brands.size > 0 %}
+      <div class="brand-grid">
+        {% for brand in related_brands %}
+          <a class="brand-card" href="{{ '/brands/' | append: brand.slug | append: '/' | relative_url }}"><span>{{ brand.name_ko }}</span><strong>{{ brand.name }}</strong><small>{{ brand.status }}</small></a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty-state">이 category의 브랜드 목록은 NSI KR 자동 연동 단계에서 채워질 예정입니다.</p>
+    {% endif %}
+  </section>
+
+  {% include ad-slot.html %}
+
+  <section class="portal-section portal-container">
+    <div class="section-heading"><div><p class="eyebrow">DOWNLOADS</p><h2>{{ coverage.label_ko }} 데이터</h2></div></div>
+    <div class="download-callout"><div><strong>Category별 CSV·GeoJSON</strong><p>현재 전체 월간 덤프를 우선 제공합니다. category별 export는 준비 중이며 임의 데이터는 제공하지 않습니다.</p></div><a class="button" href="{{ '/database/' | relative_url }}">한국 POI 데이터베이스 확인</a></div>
+  </section>
+</article>

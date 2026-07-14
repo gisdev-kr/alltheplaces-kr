@@ -1,0 +1,51 @@
+title: All the Places KR
+tagline: 한국 POI 데이터 포털
+description: 한국 프랜차이즈·시설 POI 데이터를 OSM/NSI 구조에 맞춰 정리하고 지도와 다운로드 파일로 제공합니다.
+url: https://gisdev-kr.github.io
+baseurl: /alltheplaces-kr
+lang: ko-KR
+timezone: Asia/Seoul
+author:
+  name: GISdev-kr
+  url: https://gisdev-kr.github.io
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+collections:
+  alltheplaces_categories:
+    output: true
+    permalink: /categories/:name/
+  alltheplaces_brands:
+    output: true
+    permalink: /brands/:name/
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: alltheplaces
+  - scope:
+      path: ""
+      type: alltheplaces_categories
+    values:
+      layout: atp_category
+  - scope:
+      path: ""
+      type: alltheplaces_brands
+    values:
+      layout: atp_brand
+
+goatcounter_code: gisdev-kr
+adsense_enabled: false
+adsense_client: ""
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
