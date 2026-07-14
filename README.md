@@ -52,6 +52,22 @@ pnpm --dir web dev
 
 GitHub Pages serves the production site at <https://gisdev-kr.github.io/alltheplaces-kr/>.
 
+Category and brand reports are generated from the latest monthly GeoJSON. The
+generator compares every exported POI with the NSI entry resolved by ATP's
+pipeline and reports required-tag presence separately from exact canonical
+value conformity:
+
+```bash
+python scripts/alltheplaces_kr_build_portal_reports.py \
+  --dataset dist/latest/pois.geojson \
+  --metadata dist/latest/metadata.json \
+  --nsi upstream/alltheplaces/locations/data/nsi.json
+```
+
+The report never uses spider inventory as schema coverage. Brand pages include
+only brands present in the current crawl and are regenerated on monthly and UI
+deployments.
+
 The portal records visits in the shared `gisdev-kr` GoatCounter account and can
 show the current page and whole-site counts. Public counters must be enabled in
 GoatCounter under **Settings → Allow adding visitor counts on your website**;

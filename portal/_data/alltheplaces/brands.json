@@ -1,0 +1,667 @@
+[
+  {
+    "slug": "paris-baguette",
+    "brand_key": "Q62605260",
+    "name": "Paris Baguette",
+    "name_ko": "파리바게뜨",
+    "brand_wikidata": "Q62605260",
+    "nsi_ids": [
+      "parisbaguette-e38a76"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 3326
+    },
+    "category_path": "shop/bakery",
+    "category_paths": [
+      "shop/bakery"
+    ],
+    "poi_count": 3326,
+    "nsi_matched_pois": 3326,
+    "schema_evaluated_pois": 3326,
+    "schema_required_checks": 29934,
+    "schema_present_checks": 29934,
+    "schema_exact_checks": 29934,
+    "fully_present_pois": 3326,
+    "fully_conformant_pois": 3326,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 98.6,
+    "website_rate": 100.0,
+    "spiders": [
+      "paris_baguette_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "parisbaguette-e38a76",
+        "category_path": "shop/bakery",
+        "tags": {
+          "alt_name:ko": "파리바게트",
+          "brand": "파리바게뜨",
+          "brand:en": "Paris Baguette",
+          "brand:ko": "파리바게뜨",
+          "brand:wikidata": "Q62605260",
+          "name": "파리바게뜨",
+          "name:en": "Paris Baguette",
+          "name:ko": "파리바게뜨",
+          "shop": "bakery"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 100.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 100.0,
+    "status": "conformant"
+  },
+  {
+    "slug": "gs-caltex",
+    "brand_key": "Q624012",
+    "name": "GS Caltex",
+    "name_ko": "GS칼텍스",
+    "brand_wikidata": "Q624012",
+    "nsi_ids": [
+      "gscaltex-ae677b"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 2243
+    },
+    "category_path": "amenity/fuel",
+    "category_paths": [
+      "amenity/fuel"
+    ],
+    "poi_count": 2243,
+    "nsi_matched_pois": 2243,
+    "schema_evaluated_pois": 2243,
+    "schema_required_checks": 17944,
+    "schema_present_checks": 17944,
+    "schema_exact_checks": 17944,
+    "fully_present_pois": 2243,
+    "fully_conformant_pois": 2243,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 99.8,
+    "website_rate": 0.0,
+    "spiders": [
+      "gscaltex_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "gscaltex-ae677b",
+        "category_path": "amenity/fuel",
+        "tags": {
+          "amenity": "fuel",
+          "brand": "GS칼텍스",
+          "brand:en": "GS Caltex",
+          "brand:ko": "GS칼텍스",
+          "brand:wikidata": "Q624012",
+          "name": "GS칼텍스",
+          "name:en": "GS Caltex",
+          "name:ko": "GS칼텍스"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 100.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 100.0,
+    "status": "conformant"
+  },
+  {
+    "slug": "sulbing",
+    "brand_key": "Q18156373",
+    "name": "Sulbing",
+    "name_ko": "설빙",
+    "brand_wikidata": "Q18156373",
+    "nsi_ids": [
+      "sulbing-77c68b"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 651
+    },
+    "category_path": "amenity/cafe",
+    "category_paths": [
+      "amenity/cafe"
+    ],
+    "poi_count": 651,
+    "nsi_matched_pois": 651,
+    "schema_evaluated_pois": 651,
+    "schema_required_checks": 6510,
+    "schema_present_checks": 6510,
+    "schema_exact_checks": 6510,
+    "fully_present_pois": 651,
+    "fully_conformant_pois": 651,
+    "coordinate_rate": 98.3,
+    "address_rate": 100.0,
+    "phone_rate": 0.0,
+    "website_rate": 0.0,
+    "spiders": [
+      "sulbing_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "sulbing-77c68b",
+        "category_path": "amenity/cafe",
+        "tags": {
+          "amenity": "cafe",
+          "brand": "설빙",
+          "brand:en": "Sulbing",
+          "brand:ko": "설빙",
+          "brand:wikidata": "Q18156373",
+          "cuisine": "dessert",
+          "name": "설빙",
+          "name:en": "Sulbing",
+          "name:ko": "설빙",
+          "takeaway": "yes"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 100.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 100.0,
+    "status": "conformant"
+  },
+  {
+    "slug": "hyundai",
+    "brand_key": "Q55931",
+    "name": "Hyundai",
+    "name_ko": "Hyundai",
+    "brand_wikidata": "Q55931",
+    "nsi_ids": [
+      "hyundai-13eeb7"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 640
+    },
+    "category_path": "shop/car",
+    "category_paths": [
+      "shop/car"
+    ],
+    "poi_count": 640,
+    "nsi_matched_pois": 640,
+    "schema_evaluated_pois": 640,
+    "schema_required_checks": 2560,
+    "schema_present_checks": 2560,
+    "schema_exact_checks": 2560,
+    "fully_present_pois": 640,
+    "fully_conformant_pois": 640,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 100.0,
+    "website_rate": 0.0,
+    "spiders": [
+      "hyundai_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "hyundai-13eeb7",
+        "category_path": "shop/car",
+        "tags": {
+          "brand": "Hyundai",
+          "brand:wikidata": "Q55931",
+          "name": "Hyundai",
+          "shop": "car"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 100.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 100.0,
+    "status": "conformant"
+  },
+  {
+    "slug": "kia",
+    "brand_key": "Q35349",
+    "name": "Kia",
+    "name_ko": "Kia",
+    "brand_wikidata": "Q35349",
+    "nsi_ids": [
+      "kia-13eeb7"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 586
+    },
+    "category_path": "shop/car",
+    "category_paths": [
+      "shop/car"
+    ],
+    "poi_count": 586,
+    "nsi_matched_pois": 586,
+    "schema_evaluated_pois": 586,
+    "schema_required_checks": 2344,
+    "schema_present_checks": 2344,
+    "schema_exact_checks": 1758,
+    "fully_present_pois": 586,
+    "fully_conformant_pois": 0,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 100.0,
+    "website_rate": 0.0,
+    "spiders": [
+      "kia_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [
+      {
+        "key": "name",
+        "count": 586
+      }
+    ],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "kia-13eeb7",
+        "category_path": "shop/car",
+        "tags": {
+          "brand": "Kia",
+          "brand:wikidata": "Q35349",
+          "name": "Kia",
+          "shop": "car"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 75.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 0.0,
+    "status": "needs_review"
+  },
+  {
+    "slug": "hollys",
+    "brand_key": "Q12624386",
+    "name": "Hollys",
+    "name_ko": "할리스",
+    "brand_wikidata": "Q12624386",
+    "nsi_ids": [
+      "hollys-77c68b"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 563
+    },
+    "category_path": "amenity/cafe",
+    "category_paths": [
+      "amenity/cafe"
+    ],
+    "poi_count": 563,
+    "nsi_matched_pois": 563,
+    "schema_evaluated_pois": 563,
+    "schema_required_checks": 5630,
+    "schema_present_checks": 5630,
+    "schema_exact_checks": 5630,
+    "fully_present_pois": 563,
+    "fully_conformant_pois": 563,
+    "coordinate_rate": 99.6,
+    "address_rate": 100.0,
+    "phone_rate": 90.8,
+    "website_rate": 100.0,
+    "spiders": [
+      "hollys_coffee_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "hollys-77c68b",
+        "category_path": "amenity/cafe",
+        "tags": {
+          "amenity": "cafe",
+          "brand": "할리스",
+          "brand:en": "Hollys",
+          "brand:ko": "할리스",
+          "brand:wikidata": "Q12624386",
+          "cuisine": "coffee_shop",
+          "name": "할리스",
+          "name:en": "Hollys",
+          "name:ko": "할리스",
+          "takeaway": "yes"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 100.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 100.0,
+    "status": "conformant"
+  },
+  {
+    "slug": "burger-king",
+    "brand_key": "Q177054",
+    "name": "Burger King",
+    "name_ko": "버거킹",
+    "brand_wikidata": "Q177054",
+    "nsi_ids": [
+      "burgerking-c56583"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 559
+    },
+    "category_path": "amenity/fast_food",
+    "category_paths": [
+      "amenity/fast_food"
+    ],
+    "poi_count": 559,
+    "nsi_matched_pois": 559,
+    "schema_evaluated_pois": 559,
+    "schema_required_checks": 5590,
+    "schema_present_checks": 5590,
+    "schema_exact_checks": 5590,
+    "fully_present_pois": 559,
+    "fully_conformant_pois": 559,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 100.0,
+    "website_rate": 100.0,
+    "spiders": [
+      "burger_king_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "burgerking-c56583",
+        "category_path": "amenity/fast_food",
+        "tags": {
+          "amenity": "fast_food",
+          "brand": "버거킹",
+          "brand:en": "Burger King",
+          "brand:ko": "버거킹",
+          "brand:wikidata": "Q177054",
+          "cuisine": "burger",
+          "name": "버거킹",
+          "name:en": "Burger King",
+          "name:ko": "버거킹",
+          "takeaway": "yes"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 100.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 100.0,
+    "status": "conformant"
+  },
+  {
+    "slug": "ssangyong",
+    "brand_key": "Q221869",
+    "name": "SsangYong",
+    "name_ko": "SsangYong",
+    "brand_wikidata": "Q221869",
+    "nsi_ids": [
+      "ssangyong-13eeb7"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 212
+    },
+    "category_path": "shop/car",
+    "category_paths": [
+      "shop/car"
+    ],
+    "poi_count": 212,
+    "nsi_matched_pois": 212,
+    "schema_evaluated_pois": 212,
+    "schema_required_checks": 848,
+    "schema_present_checks": 848,
+    "schema_exact_checks": 848,
+    "fully_present_pois": 212,
+    "fully_conformant_pois": 212,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 100.0,
+    "website_rate": 0.0,
+    "spiders": [
+      "ssangyong_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "ssangyong-13eeb7",
+        "category_path": "shop/car",
+        "tags": {
+          "brand": "SsangYong",
+          "brand:wikidata": "Q221869",
+          "name": "SsangYong",
+          "shop": "car"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 100.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 100.0,
+    "status": "conformant"
+  },
+  {
+    "slug": "pizza-hut",
+    "brand_key": "Q191615",
+    "name": "Pizza Hut",
+    "name_ko": "Pizza Hut",
+    "brand_wikidata": "Q191615",
+    "nsi_ids": [
+      "pizzahut-ce6bab"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 203
+    },
+    "category_path": "amenity/restaurant",
+    "category_paths": [
+      "amenity/restaurant"
+    ],
+    "poi_count": 203,
+    "nsi_matched_pois": 203,
+    "schema_evaluated_pois": 203,
+    "schema_required_checks": 1015,
+    "schema_present_checks": 1015,
+    "schema_exact_checks": 812,
+    "fully_present_pois": 203,
+    "fully_conformant_pois": 0,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 99.5,
+    "website_rate": 0.0,
+    "spiders": [
+      "pizza_hut_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [
+      {
+        "key": "name",
+        "count": 203
+      }
+    ],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "pizzahut-ce6bab",
+        "category_path": "amenity/restaurant",
+        "tags": {
+          "amenity": "restaurant",
+          "brand": "Pizza Hut",
+          "brand:wikidata": "Q191615",
+          "cuisine": "pizza",
+          "name": "Pizza Hut"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 80.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 0.0,
+    "status": "needs_review"
+  },
+  {
+    "slug": "tyremore",
+    "brand_key": "Q131681197",
+    "name": "Tyremore",
+    "name_ko": "Tyremore",
+    "brand_wikidata": "Q131681197",
+    "nsi_ids": [],
+    "nsi_resolution_methods": {
+      "unresolved": 51
+    },
+    "category_path": "shop/tyres",
+    "category_paths": [
+      "shop/tyres"
+    ],
+    "poi_count": 51,
+    "nsi_matched_pois": 0,
+    "schema_evaluated_pois": 0,
+    "schema_required_checks": 0,
+    "schema_present_checks": 0,
+    "schema_exact_checks": 0,
+    "fully_present_pois": 0,
+    "fully_conformant_pois": 0,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 100.0,
+    "website_rate": 100.0,
+    "spiders": [
+      "tyremore_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 0.0,
+    "schema_presence_rate": null,
+    "schema_conformity_rate": null,
+    "fully_present_rate": null,
+    "fully_conformant_rate": null,
+    "status": "nsi_unresolved"
+  },
+  {
+    "slug": "costco",
+    "brand_key": "Q715583",
+    "name": "Costco",
+    "name_ko": "Costco",
+    "brand_wikidata": "Q715583",
+    "nsi_ids": [
+      "costco-69a5bf"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 20
+    },
+    "category_path": "shop/wholesale",
+    "category_paths": [
+      "shop/wholesale"
+    ],
+    "poi_count": 20,
+    "nsi_matched_pois": 20,
+    "schema_evaluated_pois": 20,
+    "schema_required_checks": 100,
+    "schema_present_checks": 100,
+    "schema_exact_checks": 100,
+    "fully_present_pois": 20,
+    "fully_conformant_pois": 20,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 100.0,
+    "website_rate": 100.0,
+    "spiders": [
+      "costco_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "costco-69a5bf",
+        "category_path": "shop/wholesale",
+        "tags": {
+          "brand": "Costco",
+          "brand:wikidata": "Q715583",
+          "membership": "required",
+          "name": "Costco",
+          "shop": "wholesale"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 100.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 100.0,
+    "status": "conformant"
+  },
+  {
+    "slug": "five-guys",
+    "brand_key": "Q1131810",
+    "name": "Five Guys",
+    "name_ko": "Five Guys",
+    "brand_wikidata": "Q1131810",
+    "nsi_ids": [
+      "fiveguys-f701a8"
+    ],
+    "nsi_resolution_methods": {
+      "nsi_id": 9
+    },
+    "category_path": "amenity/fast_food",
+    "category_paths": [
+      "amenity/fast_food"
+    ],
+    "poi_count": 9,
+    "nsi_matched_pois": 9,
+    "schema_evaluated_pois": 9,
+    "schema_required_checks": 63,
+    "schema_present_checks": 63,
+    "schema_exact_checks": 63,
+    "fully_present_pois": 9,
+    "fully_conformant_pois": 9,
+    "coordinate_rate": 100.0,
+    "address_rate": 100.0,
+    "phone_rate": 100.0,
+    "website_rate": 100.0,
+    "spiders": [
+      "five_guys_kr"
+    ],
+    "missing_fields": [],
+    "mismatch_fields": [],
+    "expected_tag_sets": [
+      {
+        "nsi_id": "fiveguys-f701a8",
+        "category_path": "amenity/fast_food",
+        "tags": {
+          "amenity": "fast_food",
+          "brand": "Five Guys",
+          "brand:wikidata": "Q1131810",
+          "cuisine": "burger",
+          "name": "Five Guys",
+          "official_name": "Five Guys Burgers and Fries",
+          "takeaway": "yes"
+        }
+      }
+    ],
+    "generated_at": "2026-07-13T15:45:36.451939+00:00",
+    "nsi_match_rate": 100.0,
+    "schema_presence_rate": 100.0,
+    "schema_conformity_rate": 100.0,
+    "fully_present_rate": 100.0,
+    "fully_conformant_rate": 100.0,
+    "status": "conformant"
+  }
+]

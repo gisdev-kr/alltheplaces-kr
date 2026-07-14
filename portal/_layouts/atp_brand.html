@@ -4,50 +4,46 @@ layout: default
 {% assign brand = site.data.alltheplaces.brands | where: 'slug', page.brand_slug | first %}
 <article class="report-page">
   <header class="report-hero portal-container">
-    <p class="eyebrow">BRAND DATA REPORT · {{ brand.category_path }}</p>
+    <p class="eyebrow">CRAWLED BRAND REPORT · {{ brand.category_path }}</p>
     <h1>{{ brand.name_ko }} <span>{{ brand.name }}</span></h1>
-    <p>{{ brand.summary }}</p>
-    <div class="status-badge">{{ brand.status }}</div>
-    <div class="hero-actions">
-      <a class="button primary" href="{{ '/map/' | append: '?brand=' | append: brand.map_query | relative_url }}">지도에서 {{ brand.name_ko }} POI 보기</a>
-      <a class="button" href="{{ brand.category_url | relative_url }}">{{ brand.category_path }} category 보기</a>
-    </div>
+    <p>최신 월간 crawler 출력에 포함된 {{ brand.name_ko }} POI와 NSI 태그 스키마 충족도를 자동 집계합니다.</p>
+    <div class="status-badge {{ brand.status }}">{% case brand.status %}{% when 'conformant' %}NSI 태그 일치{% when 'needs_review' %}값 검토 필요{% else %}NSI 연결 없음{% endcase %}</div>
+    <div class="hero-actions"><a class="button primary" href="{{ '/map/' | append: '?brand=' | append: brand.name_ko | relative_url }}">지도에서 {{ brand.name_ko }} POI 보기</a><a class="button" href="{{ '/categories/' | append: brand.category_path | append: '/' | relative_url }}">{{ brand.category_path }} 리포트</a></div>
   </header>
 
   <section class="portal-section portal-container">
-    <div class="section-heading"><div><p class="eyebrow">KPI</p><h2>데이터 품질 요약</h2></div></div>
-    <div class="kpi-grid">
-      <div class="kpi"><span>수집 POI</span><strong>준비 중</strong></div>
-      <div class="kpi"><span>최근 업데이트</span><strong>준비 중</strong></div>
-      <div class="kpi"><span>좌표 보유율</span><strong>준비 중</strong></div>
-      <div class="kpi"><span>주소 보유율</span><strong>준비 중</strong></div>
+    <div class="section-heading"><div><p class="eyebrow">LATEST CRAWL</p><h2>실제 데이터 KPI</h2></div><span class="updated-label">{% if brand.generated_at != '' %}{{ brand.generated_at | date: '%Y.%m.%d' }}{% endif %}</span></div>
+    <div class="kpi-grid compact">
+      <div class="kpi"><span>수집 POI</span><strong>{{ brand.poi_count }}</strong></div>
+      <div class="kpi"><span>NSI pipeline match</span><strong>{{ brand.nsi_match_rate | default: '—' }}{% if brand.nsi_match_rate %}%{% endif %}</strong></div>
+      <div class="kpi"><span>요구 태그 존재율</span><strong>{{ brand.schema_presence_rate | default: '—' }}{% if brand.schema_presence_rate %}%{% endif %}</strong></div>
+      <div class="kpi"><span>태그 값 정확 일치율</span><strong>{{ brand.schema_conformity_rate | default: '—' }}{% if brand.schema_conformity_rate %}%{% endif %}</strong></div>
     </div>
-    <p class="source-note">검증된 월간 데이터에서 계산할 수 있을 때만 KPI를 표시합니다. placeholder에 임의 숫자를 사용하지 않습니다.</p>
+    <p class="source-note">Spider: {{ brand.spiders | join: ', ' }}{% if brand.brand_wikidata != '' %} · Wikidata {{ brand.brand_wikidata }}{% endif %}{% if brand.nsi_ids.size > 0 %} · NSI {{ brand.nsi_ids | join: ', ' }}{% endif %}</p>
   </section>
 
   <section class="portal-section portal-container split-section">
     <div>
-      <div class="section-heading"><div><p class="eyebrow">SCHEMA</p><h2>OSM / NSI tags</h2></div></div>
-      <dl class="schema-list">
-        {% for tag in brand.osm_tags %}<div><dt>{{ tag.key }}</dt><dd>{{ tag.value }}</dd></div>{% endfor %}
-      </dl>
+      <div class="section-heading"><div><p class="eyebrow">EXPECTED CONTRACT</p><h2>NSI 요구 태그</h2></div></div>
+      {% if brand.expected_tag_sets.size > 0 %}{% for tag_set in brand.expected_tag_sets %}<p class="tag-set-label"><code>{{ tag_set.category_path }}</code> · {{ tag_set.nsi_id }}</p><dl class="schema-list">{% for pair in tag_set.tags %}<div><dt>{{ pair[0] }}</dt><dd>{{ pair[1] }}</dd></div>{% endfor %}</dl>{% endfor %}{% else %}<p class="empty-state">현재 pinned NSI에서 이 브랜드의 KR 적용 항목을 찾지 못했습니다.</p>{% endif %}
     </div>
     <div>
-      <div class="section-heading"><div><p class="eyebrow">MAP</p><h2>지도 미리보기</h2></div></div>
-      <a class="map-placeholder" href="{{ '/map/' | append: '?brand=' | append: brand.map_query | relative_url }}"><span>KR</span><strong>{{ brand.name_ko }} 위치를 지도에서 탐색</strong><small>인터랙티브 지도 열기 →</small></a>
+      <div class="section-heading"><div><p class="eyebrow">DATA COMPLETENESS</p><h2>수집 필드 보유율</h2></div></div>
+      <dl class="schema-list"><div><dt>coordinates</dt><dd>{{ brand.coordinate_rate }}%</dd></div><div><dt>addr:*</dt><dd>{{ brand.address_rate }}%</dd></div><div><dt>phone</dt><dd>{{ brand.phone_rate }}%</dd></div><div><dt>website</dt><dd>{{ brand.website_rate }}%</dd></div></dl>
+      <a class="map-placeholder" href="{{ '/map/' | append: '?brand=' | append: brand.name_ko | relative_url }}"><span>KR</span><strong>{{ brand.name_ko }} 위치를 지도에서 탐색</strong><small>인터랙티브 지도 열기 →</small></a>
     </div>
   </section>
 
   {% include ad-slot.html %}
 
   <section class="portal-section portal-container">
-    <div class="section-heading"><div><p class="eyebrow">DOWNLOADS & QUALITY</p><h2>다운로드와 검토 항목</h2></div></div>
+    <div class="section-heading"><div><p class="eyebrow">SCHEMA REVIEW</p><h2>누락·불일치 필드</h2></div></div>
     <div class="quality-grid">
-      <div><strong>브랜드별 다운로드</strong><p>CSV·GeoJSON 분리 export 준비 중</p></div>
-      <div><strong>중복 의심</strong><p>월간 conflation 지표 연결 준비 중</p></div>
-      <div><strong>주소·좌표 누락</strong><p>필드 completeness 집계 준비 중</p></div>
-      <div><strong>폐점 가능성</strong><p>자동 import 없이 수동 검토</p></div>
+      <div><strong>요구 태그 검사</strong><p>{{ brand.schema_present_checks }} / {{ brand.schema_required_checks }}개 존재</p></div>
+      <div><strong>완전 일치 POI</strong><p>{{ brand.fully_conformant_pois }} / {{ brand.schema_evaluated_pois }}개</p></div>
+      <div><strong>누락 필드</strong><p>{% if brand.missing_fields.size > 0 %}{% for field in brand.missing_fields %}<code>{{ field.key }}</code> {{ field.count }}건{% unless forloop.last %}<br>{% endunless %}{% endfor %}{% else %}없음{% endif %}</p></div>
+      <div><strong>값 불일치 필드</strong><p>{% if brand.mismatch_fields.size > 0 %}{% for field in brand.mismatch_fields %}<code>{{ field.key }}</code> {{ field.count }}건{% unless forloop.last %}<br>{% endunless %}{% endfor %}{% else %}없음{% endif %}</p></div>
     </div>
-    <div class="related-links"><a href="{{ '/database/' | relative_url }}">전체 한국 POI 데이터 다운로드 →</a><a href="{{ brand.category_url | relative_url }}">같은 category 브랜드 보기 →</a></div>
+    <div class="related-links"><a href="{{ '/database/' | relative_url }}">전체 한국 POI 데이터 다운로드 →</a><a href="{{ '/categories/' | append: brand.category_path | append: '/' | relative_url }}">같은 category 브랜드 비교 →</a></div>
   </section>
 </article>

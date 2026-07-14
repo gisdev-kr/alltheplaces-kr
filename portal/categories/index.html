@@ -1,22 +1,30 @@
 ---
 layout: alltheplaces
-title: NSI KR Category Coverage | All the Places KR
-description: NSI의 한국 영업 범위를 기준으로 All the Places spider 지원 현황을 category별로 비교합니다.
+title: NSI 스키마 품질 | All the Places KR
+description: 최신 All the Places KR 출력이 NSI 브랜드 태그 스키마를 얼마나 충족하는지 category별로 비교합니다.
 permalink: /categories/
 ---
-{% assign coverage = site.data.alltheplaces.coverage | sort: 'priority' %}
-<header class="page-hero portal-container"><p class="eyebrow">NSI KR COVERAGE</p><h1>Category coverage</h1><p>Name Suggestion Index에서 국가 코드 KR에 해당하는 브랜드와 upstream All the Places spider 지원 범위를 비교합니다. 현재 값은 자동 생성으로 이전하기 위한 초기 구조화 데이터입니다.</p><div class="hero-actions"><a class="button primary" href="{{ '/map/' | relative_url }}">한국 POI 지도 보기</a><a class="button" href="{{ '/database/' | relative_url }}">데이터 다운로드</a></div></header>
+{% assign report = site.data.alltheplaces.coverage %}
+{% assign categories = report.categories %}
+<header class="page-hero portal-container"><p class="eyebrow">NSI SCHEMA QUALITY</p><h1>Category reports</h1><p>최신 월간 GeoJSON의 각 POI를 ATP에 고정된 NSI 원본과 대조합니다. spider 보유 개수가 아니라 실제 출력의 NSI 연결률, 요구 태그 존재율, canonical 값 정확 일치율을 집계합니다.</p><div class="hero-actions"><a class="button primary" href="{{ '/map/' | relative_url }}">한국 POI 지도 보기</a><a class="button" href="{{ '/database/' | relative_url }}">데이터 다운로드</a></div></header>
 
 <section class="portal-section portal-container">
-  <div class="section-heading"><div><p class="eyebrow">{{ coverage.size }} CATEGORIES</p><h2>지원 범위</h2></div><span class="updated-label">with spider / total NSI KR</span></div>
-  <div class="coverage-table" role="table" aria-label="NSI KR category coverage">
-    {% for item in coverage %}
-      {% assign rate = item.with_spider | times: 100.0 | divided_by: item.total_nsi | round: 1 %}
-      <article class="coverage-row" id="{{ item.slug }}" role="row"><div><span class="category-label">{{ item.label_ko }}</span><small>{{ item.label_en }}</small></div><code>{{ item.path }}</code><strong>{{ item.with_spider }} / {{ item.total_nsi }}</strong><div><div class="coverage-meter"><span style="width:{{ rate }}%"></span></div><small>{{ rate }}%</small></div>{% if item.page_ready %}<a href="{{ item.url | relative_url }}">{{ item.label_ko }} POI 데이터 보기 →</a>{% else %}<span class="pending">상세 페이지 준비 중</span>{% endif %}</article>
+  <div class="section-heading"><div><p class="eyebrow">{{ categories.size }} CRAWLED CATEGORIES</p><h2>NSI 태그 충족도</h2></div><span class="updated-label">{{ report.meta.nsi_version }} · {{ report.meta.generated_at | date: '%Y.%m.%d' }}</span></div>
+  <div class="coverage-table" role="table" aria-label="NSI category schema quality">
+    <div class="coverage-row coverage-head" role="row"><span>Category</span><span>수집 범위</span><span>NSI match</span><span>태그 존재</span><span>정확 일치</span><span></span></div>
+    {% for item in categories %}
+      <article class="coverage-row" id="{{ item.slug }}" role="row">
+        <div><span class="category-label">{{ item.path }}</span><small>{{ item.brand_count }} brands · {{ item.poi_count }} POIs</small></div>
+        <code>{{ item.schema_required_checks }} tag checks</code>
+        <strong>{{ item.nsi_match_rate | default: '—' }}{% if item.nsi_match_rate %}%{% endif %}</strong>
+        <div class="rate-cell"><div class="coverage-meter"><span style="width:{{ item.schema_presence_rate | default: 0 }}%"></span></div><small>{{ item.schema_presence_rate | default: '—' }}{% if item.schema_presence_rate %}%{% endif %}</small></div>
+        <div class="rate-cell"><div class="coverage-meter exact"><span style="width:{{ item.schema_conformity_rate | default: 0 }}%"></span></div><small>{{ item.schema_conformity_rate | default: '—' }}{% if item.schema_conformity_rate %}%{% endif %}</small></div>
+        <a href="{{ item.url | relative_url }}">{{ item.path }} 리포트 →</a>
+      </article>
     {% endfor %}
   </div>
 </section>
 
 {% include ad-slot.html %}
 
-<section class="portal-section portal-container"><div class="download-callout"><div><strong>NSI KR 자동 갱신 준비</strong><p>템플릿은 coverage 값을 직접 포함하지 않습니다. 향후 NSI 원본의 country code가 KR 또는 전 세계인 항목을 읽어 같은 data schema를 생성할 예정입니다.</p></div><a class="button" href="https://github.com/osmlab/name-suggestion-index">NSI 원본 저장소 ↗</a></div></section>
+<section class="portal-section portal-container"><div class="download-callout"><div><strong>매월 자동 재계산</strong><p>월간 crawler 실행 후 최종 GeoJSON과 pinned All the Places의 <code>locations/data/nsi.json</code>을 대조합니다. upstream NSI가 갱신되거나 spider 출력이 바뀌면 category와 brand 페이지도 함께 다시 생성됩니다.</p></div><a class="button" href="https://github.com/alltheplaces/alltheplaces/blob/master/locations/pipelines/apply_nsi_categories.py">ATP NSI pipeline 보기 ↗</a></div></section>

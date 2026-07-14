@@ -3,9 +3,9 @@ name: Deploy portal UI
 on:
   push:
     branches: [main]
-    paths: ["web/**", "portal/**", ".github/workflows/deploy-pages.yml"]
+    paths: ["web/**", "portal/**", "alltheplaces_kr/schema_reports.py", "scripts/alltheplaces_kr_build_portal_reports.py", "upstream/alltheplaces", ".github/workflows/deploy-pages.yml"]
   pull_request:
-    paths: ["web/**", "portal/**", ".github/workflows/deploy-pages.yml"]
+    paths: ["web/**", "portal/**", "alltheplaces_kr/schema_reports.py", "scripts/alltheplaces_kr_build_portal_reports.py", "upstream/alltheplaces", ".github/workflows/deploy-pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -25,6 +25,8 @@ jobs:
       BUNDLE_GEMFILE: ${{ github.workspace }}/portal/Gemfile
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Restore newest monthly data when available
         env:
           GH_TOKEN: ${{ github.token }}
@@ -35,6 +37,13 @@ jobs:
             mkdir -p web/public/data/latest
             gh run download "$run_id" --name monthly-dist --dir web/public/data/latest
           fi
+      - name: Generate NSI schema and crawled brand reports
+        run: |
+          python3 scripts/alltheplaces_kr_build_portal_reports.py \
+            --dataset web/public/data/latest/pois.geojson \
+            --metadata web/public/data/latest/metadata.json \
+            --nsi upstream/alltheplaces/locations/data/nsi.json \
+            --portal portal
       - uses: pnpm/action-setup@v4
         with:
           version: 11.7.0
