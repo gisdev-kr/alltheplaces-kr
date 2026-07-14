@@ -37,6 +37,7 @@ jobs:
         run: |
           uv run --project upstream/alltheplaces python -m pytest tests
           uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_run_monthly.py --list-only
+          uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_discover_spiders.py --unreviewed-only
       - name: Crawl Korea allowlist and assemble dist
         env:
           PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/upstream/alltheplaces
