@@ -13,6 +13,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 ATP_ROOT = PROJECT_ROOT / "upstream" / "alltheplaces"
 DEFAULT_ALLOWLIST = PROJECT_ROOT / "alltheplaces_kr" / "spiders.txt"
 DEFAULT_RAW_DIR = PROJECT_ROOT / "dist" / "raw"
+DEFAULT_DIST_DIR = PROJECT_ROOT / "dist" / "latest"
+DEFAULT_NSI = ATP_ROOT / "locations" / "data" / "nsi.json"
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -84,6 +86,17 @@ def main() -> int:
     if not args.crawl_only:
         run_script("alltheplaces_kr_build_latest.py", "--raw-dir", str(args.raw_dir))
         run_script("alltheplaces_kr_build_web_data.py")
+        run_script(
+            "alltheplaces_kr_build_portal_reports.py",
+            "--dataset",
+            str(DEFAULT_DIST_DIR / "pois.geojson"),
+            "--metadata",
+            str(DEFAULT_DIST_DIR / "metadata.json"),
+            "--nsi",
+            str(DEFAULT_NSI),
+            "--portal",
+            str(PROJECT_ROOT / "portal"),
+        )
     return 0
 
 
