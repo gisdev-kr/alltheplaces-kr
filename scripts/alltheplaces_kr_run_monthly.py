@@ -42,9 +42,6 @@ def validate_allowlist(spiders: list[str], available: set[str]) -> None:
     missing = sorted(set(spiders) - available)
     if missing:
         raise ValueError(f"Allowlisted spiders are not registered in pinned ATP: {', '.join(missing)}")
-    invalid = [name for name in spiders if not name.endswith("_kr")]
-    if invalid:
-        raise ValueError(f"Korea allowlist names must end in _kr: {', '.join(invalid)}")
 
 
 def crawl(spiders: list[str], raw_dir: Path, environment: dict[str, str]) -> None:
@@ -92,4 +89,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

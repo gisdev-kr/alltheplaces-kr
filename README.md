@@ -8,7 +8,7 @@ It is **not** the official All the Places project. It is **not** an automatic Op
 
 The official project is pinned at `upstream/alltheplaces` as a Git submodule. This repository contains only:
 
-- an explicit allowlist of official Korea spiders;
+- an explicit allowlist of reviewed Korea and multi-country spiders;
 - Korea bounding-box validation and monthly build wrappers;
 - review-only OSM mapping/conflation artifacts;
 - a static MapLibre data portal.
@@ -25,6 +25,13 @@ uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_run_monthl
 ```
 
 The monthly output is written under `dist/latest/`. The crawl is intentionally limited to [`alltheplaces_kr/spiders.txt`](alltheplaces_kr/spiders.txt).
+
+Spider names are not used as the only country signal. Run
+`scripts/alltheplaces_kr_discover_spiders.py` to find `_kr` spiders and multi-country
+spiders whose source mentions Korean locale/country signals. Discovery is advisory:
+new candidates enter the monthly run only after they are reviewed and added to the
+allowlist, and emitted features are still filtered by `addr:country=KR` and Korea's
+bounding box.
 
 ## Update upstream
 
@@ -45,7 +52,16 @@ pnpm --dir web dev
 
 GitHub Pages serves the production site at <https://gisdev-kr.github.io/alltheplaces-kr/>.
 
+The portal records visits in the shared `gisdev-kr` GoatCounter account and can
+show the current page and whole-site counts. Public counters must be enabled in
+GoatCounter under **Settings → Allow adding visitor counts on your website**;
+until then the UI keeps the values as `—`.
+
+The dismissible bottom ad container is disabled by default. To include it in a
+future build, set `VITE_ADSENSE_ENABLED=true` and provide
+`VITE_ADSENSE_CLIENT`; see `web/.env.example`. It never blocks the map, filters,
+details, or downloads.
+
 ## Data and code licenses
 
 This overlay code is MIT licensed. All the Places code retains its upstream MIT license. Generated location data follows the upstream All the Places CC0 dedication; consult the upstream repository and individual source terms before reuse.
-
