@@ -72,3 +72,24 @@ def test_unique_wikidata_category_kr_can_supply_expected_contract_without_claimi
     assert coverage["summary"]["nsi_matched_pois"] == 0
     assert brands[0]["schema_evaluated_pois"] == 1
     assert brands[0]["nsi_resolution_methods"] == {"wikidata_category_kr": 1}
+
+
+def test_unbranded_pois_do_not_become_fake_brand_reports():
+    unbranded = {
+        "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [129.1, 35.2]},
+        "properties": {
+            "@spider": "jaguar_land_rover",
+            "addr:country": "KR",
+            "name": "효성 프리미어 모터스 - 부산 센텀",
+            "shop": "car_repair",
+        },
+    }
+
+    coverage, brands = build_schema_reports({"type": "FeatureCollection", "features": [unbranded]}, NSI)
+
+    assert brands == []
+    assert coverage["summary"]["brand_count"] == 0
+    assert coverage["summary"]["unbranded_pois"] == 1
+    assert coverage["categories"][0]["brand_count"] == 0
+    assert coverage["categories"][0]["brand_slugs"] == []

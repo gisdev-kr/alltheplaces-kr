@@ -44,12 +44,36 @@ def write_csv(features: Sequence[dict[str, Any]], output: Path) -> None:
         exporter.finish_exporting()
 
 
-def build_latest(raw_dir: Path, output_dir: Path, allowlist: Path) -> dict[str, Any]:
+def merge_baseline_features(
+    new_features: Sequence[dict[str, Any]], baseline: Path | None, replace_spiders: set[str]
+) -> list[dict[str, Any]]:
+    if not baseline:
+        return list(new_features)
+    collection = json.loads(baseline.read_text(encoding="utf-8"))
+    if collection.get("type") != "FeatureCollection":
+        raise ValueError(f"Baseline is not a GeoJSON FeatureCollection: {baseline}")
+    kept = [
+        feature
+        for feature in collection.get("features", [])
+        if feature.get("properties", {}).get("@spider") not in replace_spiders
+    ]
+    return kept + list(new_features)
+
+
+def build_latest(
+    raw_dir: Path,
+    output_dir: Path,
+    allowlist: Path,
+    baseline: Path | None = None,
+    replace_spiders: set[str] | None = None,
+) -> dict[str, Any]:
     output_dir.mkdir(parents=True, exist_ok=True)
     raw_paths = list(raw_dir.glob("*.ndgeojson"))
     if not raw_paths:
         raise ValueError(f"No ATP NDGeoJSON exports found in {raw_dir}")
-    features = [feature for feature in load_ndgeojson(raw_paths) if is_korea_geojson_feature(feature)]
+    new_features = [feature for feature in load_ndgeojson(raw_paths) if is_korea_geojson_feature(feature)]
+    replaced = replace_spiders or {path.stem for path in raw_paths}
+    features = merge_baseline_features(new_features, baseline, replaced)
     spider_count = len(read_allowlist(allowlist))
     write_geojson(features, output_dir / "pois.geojson", spider_count)
     write_ndgeojson(features, output_dir / "pois.ndgeojson")
@@ -69,6 +93,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--allowlist", type=Path, default=DEFAULT_ALLOWLIST)
+    parser.add_argument("--baseline", type=Path)
+    parser.add_argument("--replace-spider", action="append", default=[])
     parser.add_argument("--validate-only", action="store_true")
     return parser.parse_args()
 
@@ -79,7 +105,13 @@ def main() -> int:
         validate_dist(args.output_dir)
         print(f"validated {args.output_dir}")
         return 0
-    print(json.dumps(build_latest(args.raw_dir, args.output_dir, args.allowlist), ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            build_latest(args.raw_dir, args.output_dir, args.allowlist, args.baseline, set(args.replace_spider)),
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return 0
 
 

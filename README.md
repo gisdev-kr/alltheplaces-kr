@@ -9,11 +9,12 @@ It is **not** the official All the Places project. It is **not** an automatic Op
 The official project is pinned at `upstream/alltheplaces` as a Git submodule. This repository contains only:
 
 - an explicit allowlist of reviewed Korea and multi-country spiders;
+- narrow Korea-only subclasses when an upstream multi-country spider cannot be scoped safely;
 - Korea bounding-box validation and monthly build wrappers;
 - review-only OSM mapping/conflation artifacts;
 - a static MapLibre data portal.
 
-No upstream spider is copied here. NSI matching, Wikidata handling, the ATP item model, cleanup pipelines, and exporters continue to come from the pinned upstream revision.
+No upstream spider is copied here. A local subclass may override only request scope or a confirmed Korea-specific edge case while inheriting the upstream parser. NSI matching, Wikidata handling, the ATP item model, cleanup pipelines, and exporters continue to come from the pinned upstream revision.
 
 ## Clone and run
 
@@ -25,6 +26,12 @@ uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_run_monthl
 ```
 
 The monthly output is written under `dist/latest/`. The crawl is intentionally limited to [`alltheplaces_kr/spiders.txt`](alltheplaces_kr/spiders.txt).
+
+The monthly GitHub Actions workflow also accepts an optional comma-separated
+`spiders` input. A targeted run restores the newest successful `monthly-dist`,
+replaces only those spider records, regenerates every export and report, and
+leaves all unrelated POIs unchanged. Leaving the input blank keeps the full
+scheduled build behavior.
 
 Spider names are not used as the only country signal. Run
 `scripts/alltheplaces_kr_discover_spiders.py` to find `_kr` spiders and multi-country
@@ -40,7 +47,7 @@ git submodule update --remote upstream/alltheplaces
 uv run --project upstream/alltheplaces python -m pytest tests
 ```
 
-Commit the submodule pointer only after the Korea-specific tests and a sample crawl pass. Common spider fixes should be proposed to the official All the Places repository rather than maintained as local copies.
+Commit the submodule pointer only after the Korea-specific tests and a sample crawl pass. Common spider fixes should be proposed to the official All the Places repository. Temporary local subclasses must inherit the upstream spider and stay narrow enough to delete after the upstream fix is pinned.
 
 ## Static portal
 

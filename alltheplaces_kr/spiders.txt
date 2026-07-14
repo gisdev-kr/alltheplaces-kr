@@ -8,7 +8,7 @@ five_guys_kr
 gscaltex_kr
 hollys_coffee_kr
 hyundai_kr
-jaguar_land_rover
+jaguar_land_rover_kr
 kia_kr
 mango
 nespresso

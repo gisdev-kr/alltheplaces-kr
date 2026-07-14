@@ -28,5 +28,20 @@ The submodule pointer is the reproducibility boundary. Upstream synchronization 
 4. Add its exact spider name to `alltheplaces_kr/spiders.txt`.
 5. Run `--list-only`, the Korea tests, and a sample crawl.
 
-There are no overlay-local spiders by design. Starbucks Korea is therefore absent until a suitable spider is accepted upstream.
+Overlay-local spiders are exceptional wrappers, not independent crawler
+implementations. They must inherit an ATP spider and limit themselves to a
+Korea request scope or a documented output correction. The current
+`jaguar_land_rover_kr` wrapper requests only `ko_kr`, labels bodyshop-only
+locations returned by both marque queries as `Jaguar Land Rover`, and otherwise
+delegates parsing and all pipelines to ATP. It should be removed when an
+equivalent upstream fix is available in the pinned submodule.
+
+## Partial spider refresh
+
+The scheduled workflow runs the complete reviewed allowlist. A manual workflow
+run can instead provide a comma-separated `spiders` input. The build restores
+the newest successful artifact, removes only the selected spider records (and
+any declared predecessor names), appends the new crawl, then rebuilds GeoJSON,
+CSV, OSM, metadata, schema reports, and Pages. This is intended for correcting
+one source without re-running unrelated APIs.
 
