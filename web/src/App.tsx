@@ -4,9 +4,11 @@ import { DetailPanel } from "./components/DetailPanel";
 import { Downloads } from "./components/Downloads";
 import { Filters } from "./components/Filters";
 import { TrafficStats } from "./components/TrafficStats";
+import { UnifiedSearch } from "./components/UnifiedSearch";
 import { loadPortalData } from "./data/loadData";
 import type { Metadata, PoiCollection, PoiFeature } from "./data/types";
 import { PoiMap } from "./map/PoiMap";
+import type { KoreaLocationResult } from "./map/koreaNominatim";
 
 const empty: PoiCollection = {type:"FeatureCollection", features:[]};
 const value = (input:unknown) => input == null ? "" : String(input);
@@ -16,6 +18,7 @@ export default function App() {
   const [collection,setCollection] = useState(empty);
   const [metadata,setMetadata] = useState<Metadata|null>(null);
   const [selected,setSelected] = useState<PoiFeature|null>(null);
+  const [locationTarget,setLocationTarget] = useState<KoreaLocationResult|null>(null);
   const [query,setQuery] = useState("");
   const [brand,setBrand] = useState("");
   const [spider,setSpider] = useState("");
@@ -41,7 +44,7 @@ export default function App() {
       return (!needle||haystack.includes(needle))&&(!brand||value(properties.brand)===brand)&&(!spider||value(properties["@spider"])===spider)&&(!status||value(properties.match_status)===status);
     })};
   }, [collection,query,brand,spider,status]);
-  const reset=()=>{setQuery("");setBrand("");setSpider("");setStatus("")};
+  const reset=()=>{setQuery("");setBrand("");setSpider("");setStatus("");setLocationTarget(null)};
   const active=Boolean(query||brand||spider||status);
   const date=metadata?new Date(metadata.generated_at).toLocaleDateString("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit"}):"불러오는 중";
 
@@ -51,12 +54,12 @@ export default function App() {
       <nav><TrafficStats/><button onClick={()=>setPanel(panel==="about"?null:"about")}>소개</button><a href="https://github.com/gisdev-kr/alltheplaces-kr">GitHub ↗</a></nav>
     </header>
     <main className="stage">
-      {!error&&<PoiMap data={filtered} onSelect={setSelected}/>}
+      {!error&&<PoiMap data={filtered} onSelect={setSelected} target={locationTarget}/>}
       <section className="dataset-card">
         <div className="dataset-title"><span className="mark">KR</span><div><h1>All the Places KR</h1><p>한국 POI 월간 스냅샷</p></div></div>
         <div className="dataset-stats"><span><b>{collection.features.length.toLocaleString("ko-KR")}</b> POI</span><span><b>{metadata?.spider_count??"—"}</b> spiders</span><span><b>{date}</b> generated</span></div>
       </section>
-      <label className="search"><span>⌕</span><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="장소, 브랜드, 주소 검색" aria-label="POI 검색"/>{query&&<button onClick={()=>setQuery("")} aria-label="검색어 지우기">×</button>}</label>
+      <UnifiedSearch value={query} brands={options.brands} onChange={setQuery} onLocation={(location)=>setLocationTarget({...location})}/>
       <div className="toolbar"><button className={panel==="filters"||active?"active":""} onClick={()=>setPanel(panel==="filters"?null:"filters")}>필터 {active&&<i/>}</button><button className={panel==="downloads"?"active":""} onClick={()=>setPanel(panel==="downloads"?null:"downloads")}>다운로드</button></div>
       {panel==="filters"&&<section className="floating filters-panel"><header><strong>표시할 POI</strong><button onClick={()=>setPanel(null)}>×</button></header><Filters {...options} brand={brand} spider={spider} status={status} onBrand={setBrand} onSpider={setSpider} onStatus={setStatus}/><button className="reset" onClick={reset} disabled={!active}>필터 초기화</button></section>}
       {panel==="downloads"&&<section className="floating downloads-panel"><header><strong>월간 데이터</strong><button onClick={()=>setPanel(null)}>×</button></header><p>필터와 무관한 전체 최신 스냅샷입니다.</p><Downloads/></section>}

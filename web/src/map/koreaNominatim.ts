@@ -1,9 +1,3 @@
-import type {
-  CarmenGeojsonFeature,
-  MaplibreGeocoderApi,
-  MaplibreGeocoderApiConfig,
-} from "@maplibre/maplibre-gl-geocoder";
-
 const ENDPOINT = "https://nominatim.openstreetmap.org/search";
 const MIN_REQUEST_INTERVAL_MS = 1_000;
 
@@ -20,6 +14,18 @@ type NominatimFeature = GeoJSON.Feature<GeoJSON.Geometry, NominatimProperties> &
 };
 
 type NominatimResponse = GeoJSON.FeatureCollection<GeoJSON.Geometry, NominatimProperties>;
+
+export type KoreaLocationResult = {
+  id: string;
+  name: string;
+  placeName: string;
+  center: [number, number];
+  bbox?: [number, number, number, number];
+};
+
+const cache = new Map<string, KoreaLocationResult[]>();
+let nextRequestAt = 0;
+let requestQueue = Promise.resolve();
 
 const wait = (milliseconds: number) =>
   new Promise<void>((resolve) => window.setTimeout(resolve, milliseconds));
@@ -38,7 +44,7 @@ function centerOf(feature: NominatimFeature): [number, number] | null {
   return null;
 }
 
-function toGeocoderFeature(feature: NominatimFeature): CarmenGeojsonFeature | null {
+function toLocation(feature: NominatimFeature): KoreaLocationResult | null {
   const center = centerOf(feature);
   if (!center) return null;
 
@@ -46,18 +52,16 @@ function toGeocoderFeature(feature: NominatimFeature): CarmenGeojsonFeature | nu
   if (!placeName) return null;
 
   return {
-    ...feature,
-    geometry: {type: "Point", coordinates: center},
-    text: feature.properties.name || placeName.split(",", 1)[0],
-    place_name: placeName,
-    place_type: [feature.properties.type || feature.properties.category || "place"],
+    id: String(feature.id || `${placeName}-${center.join("-")}`),
+    name: feature.properties.name || placeName.split(",", 1)[0],
+    placeName,
     center,
     bbox: feature.bbox,
   };
 }
 
-function searchUrl(config: MaplibreGeocoderApiConfig): URL | null {
-  const query = typeof config.query === "string" ? config.query.trim() : "";
+function searchUrl(input: string): URL | null {
+  const query = input.trim();
   if (!query) return null;
 
   const url = new URL(ENDPOINT);
@@ -67,45 +71,37 @@ function searchUrl(config: MaplibreGeocoderApiConfig): URL | null {
     addressdetails: "1",
     countrycodes: "kr",
     "accept-language": "ko",
-    limit: String(Math.min(config.limit || 5, 5)),
+    limit: "5",
   }).toString();
   return url;
 }
 
-export function createKoreaNominatimApi(): MaplibreGeocoderApi {
-  const cache = new Map<string, CarmenGeojsonFeature[]>();
-  let nextRequestAt = 0;
-  let requestQueue = Promise.resolve();
+export async function searchKoreaLocations(input: string): Promise<KoreaLocationResult[]> {
+  const url = searchUrl(input);
+  if (!url) return [];
 
-  return {
-    async forwardGeocode(config) {
-      const url = searchUrl(config);
-      if (!url) return {type: "FeatureCollection", features: []};
+  const cacheKey = url.searchParams.get("q")!.toLocaleLowerCase("ko");
+  const cached = cache.get(cacheKey);
+  if (cached) return cached;
 
-      const cacheKey = url.searchParams.get("q")!.toLocaleLowerCase("ko");
-      const cached = cache.get(cacheKey);
-      if (cached) return {type: "FeatureCollection", features: cached};
+  const request = requestQueue.then(async () => {
+    const delay = Math.max(0, nextRequestAt - Date.now());
+    if (delay) await wait(delay);
+    nextRequestAt = Date.now() + MIN_REQUEST_INTERVAL_MS;
 
-      const request = requestQueue.then(async () => {
-        const delay = Math.max(0, nextRequestAt - Date.now());
-        if (delay) await wait(delay);
-        nextRequestAt = Date.now() + MIN_REQUEST_INTERVAL_MS;
+    const response = await fetch(url, {
+      headers: {Accept: "application/geo+json, application/json"},
+    });
+    if (!response.ok) throw new Error(`Nominatim search failed: ${response.status}`);
 
-        const response = await fetch(url, {
-          headers: {Accept: "application/geo+json, application/json"},
-        });
-        if (!response.ok) throw new Error(`Nominatim search failed: ${response.status}`);
+    const payload = (await response.json()) as NominatimResponse;
+    const locations = payload.features
+      .map((feature) => toLocation(feature as NominatimFeature))
+      .filter((location): location is KoreaLocationResult => location !== null);
+    cache.set(cacheKey, locations);
+    return locations;
+  });
 
-        const payload = (await response.json()) as NominatimResponse;
-        const features = payload.features
-          .map((feature) => toGeocoderFeature(feature as NominatimFeature))
-          .filter((feature): feature is CarmenGeojsonFeature => feature !== null);
-        cache.set(cacheKey, features);
-        return {type: "FeatureCollection" as const, features};
-      });
-
-      requestQueue = request.then(() => undefined, () => undefined);
-      return request;
-    },
-  };
+  requestQueue = request.then(() => undefined, () => undefined);
+  return request;
 }
