@@ -2,7 +2,7 @@ name: Deploy portal UI
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/poi-data-portal]
     paths: ["web/**", "portal/**", ".github/workflows/deploy-pages.yml"]
   pull_request:
     paths: ["web/**", "portal/**", ".github/workflows/deploy-pages.yml"]
@@ -62,7 +62,7 @@ jobs:
         with:
           path: portal/_site
   deploy:
-    if: github.event_name != 'pull_request'
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
