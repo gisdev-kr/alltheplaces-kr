@@ -2,7 +2,7 @@ name: Deploy portal UI
 
 on:
   push:
-    branches: [main, codex/poi-data-portal]
+    branches: [main]
     paths: ["web/**", "portal/**", ".github/workflows/deploy-pages.yml"]
   pull_request:
     paths: ["web/**", "portal/**", ".github/workflows/deploy-pages.yml"]
