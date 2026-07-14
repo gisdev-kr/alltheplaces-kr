@@ -16,6 +16,10 @@ DEFAULT_RAW_DIR = PROJECT_ROOT / "dist" / "raw"
 DEFAULT_DIST_DIR = PROJECT_ROOT / "dist" / "latest"
 DEFAULT_NSI = ATP_ROOT / "locations" / "data" / "nsi.json"
 
+SPIDER_REPLACEMENTS = {
+    "jaguar_land_rover_kr": {"jaguar_land_rover"},
+}
+
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -67,6 +71,17 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--allowlist", type=Path, default=DEFAULT_ALLOWLIST)
     parser.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
+    parser.add_argument(
+        "--spider",
+        action="append",
+        default=[],
+        help="Refresh only this allowlisted spider. May be repeated; requires --baseline when assembling dist.",
+    )
+    parser.add_argument(
+        "--baseline",
+        type=Path,
+        help="Existing pois.geojson whose selected spider records will be replaced during a partial refresh.",
+    )
     parser.add_argument("--crawl-only", action="store_true")
     parser.add_argument("--list-only", action="store_true", help="Validate and print the allowlist without crawling.")
     return parser.parse_args()
@@ -76,15 +91,29 @@ def main() -> int:
     args = parse_args()
     if not ATP_ROOT.joinpath("pyproject.toml").is_file():
         raise FileNotFoundError("Missing ATP submodule. Run: git submodule update --init --recursive")
-    spiders = read_allowlist(args.allowlist)
+    allowlisted_spiders = read_allowlist(args.allowlist)
+    spiders = args.spider or allowlisted_spiders
+    unknown = sorted(set(spiders) - set(allowlisted_spiders))
+    if unknown:
+        raise ValueError(f"Requested spiders are not in the reviewed allowlist: {', '.join(unknown)}")
+    if args.spider and not args.baseline and not args.crawl_only:
+        raise ValueError("Partial refresh requires --baseline so unrelated spider data is preserved")
     environment = scrapy_environment()
     validate_allowlist(spiders, available_spiders(environment))
     if args.list_only:
-        print("\n".join(spiders))
+        print("\n".join(allowlisted_spiders))
         return 0
     crawl(spiders, args.raw_dir, environment)
     if not args.crawl_only:
-        run_script("alltheplaces_kr_build_latest.py", "--raw-dir", str(args.raw_dir))
+        build_arguments = ["--raw-dir", str(args.raw_dir)]
+        if args.baseline:
+            build_arguments.extend(("--baseline", str(args.baseline)))
+            replaced_spiders = set(spiders)
+            for spider in spiders:
+                replaced_spiders.update(SPIDER_REPLACEMENTS.get(spider, set()))
+            for spider in sorted(replaced_spiders):
+                build_arguments.extend(("--replace-spider", spider))
+        run_script("alltheplaces_kr_build_latest.py", *build_arguments)
         run_script("alltheplaces_kr_build_web_data.py")
         run_script(
             "alltheplaces_kr_build_portal_reports.py",

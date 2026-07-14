@@ -4,9 +4,15 @@ on:
   schedule:
     - cron: "0 18 1 * *"
   workflow_dispatch:
+    inputs:
+      spiders:
+        description: "Comma-separated allowlisted spiders to refresh; blank runs the full allowlist"
+        required: false
+        default: ""
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -40,10 +46,33 @@ jobs:
           uv run --project upstream/alltheplaces python -m pytest tests
           uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_run_monthly.py --list-only
           uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_discover_spiders.py --unreviewed-only
+      - name: Restore baseline for a partial spider refresh
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.spiders != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          previous_run=$(gh run list --workflow monthly-poi-kr.yml --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+          test -n "$previous_run"
+          mkdir -p dist/latest
+          gh run download "$previous_run" --name monthly-dist --dir dist/latest
       - name: Crawl Korea allowlist and assemble dist
         env:
           PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/upstream/alltheplaces
-        run: uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_run_monthly.py
+          REFRESH_SPIDERS: ${{ inputs.spiders }}
+        run: |
+          if [ -z "$REFRESH_SPIDERS" ]; then
+            uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_run_monthly.py
+          else
+            args=()
+            IFS=',' read -ra requested <<< "$REFRESH_SPIDERS"
+            for spider in "${requested[@]}"; do
+              spider="${spider//[[:space:]]/}"
+              test -n "$spider"
+              args+=(--spider "$spider")
+            done
+            uv run --project upstream/alltheplaces python scripts/alltheplaces_kr_run_monthly.py \
+              "${args[@]}" --baseline dist/latest/pois.geojson
+          fi
       - name: Validate monthly bundle
         env:
           PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/upstream/alltheplaces

@@ -159,12 +159,7 @@ def build_schema_reports(
         entry, resolution = resolve_nsi_entry(properties, by_id, by_wikidata)
         assessment = tag_assessment(properties, entry)
         category_path = entry["category_path"] if entry else category_from_properties(properties)
-        brand_key = str(
-            properties.get("brand:wikidata")
-            or properties.get("brand")
-            or properties.get("@spider")
-            or "unknown"
-        )
+        brand_key = str(properties.get("brand:wikidata") or properties.get("brand") or "") or None
         assessed.append(
             {
                 "feature": feature,
@@ -179,7 +174,8 @@ def build_schema_reports(
 
     grouped_brands: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in assessed:
-        grouped_brands[row["brand_key"]].append(row)
+        if row["brand_key"]:
+            grouped_brands[row["brand_key"]].append(row)
 
     brands: list[dict[str, Any]] = []
     used_slugs: set[str] = set()
@@ -278,7 +274,7 @@ def build_schema_reports(
             "slug": category_path.replace("/", "-"),
             "url": f"/categories/{category_path}/",
             "poi_count": len(rows),
-            "brand_count": len({row["brand_key"] for row in rows}),
+            "brand_count": len({row["brand_key"] for row in rows if row["brand_key"]}),
             "nsi_matched_pois": sum(row["resolution"] == "nsi_id" for row in rows),
             "schema_evaluated_pois": evaluated,
             "schema_required_checks": required,
@@ -294,7 +290,9 @@ def build_schema_reports(
                 and row["assessment"]["exact"] == row["assessment"]["required"]
                 for row in rows
             ),
-            "brand_slugs": sorted({brand_by_key[row["brand_key"]]["slug"] for row in rows}),
+            "brand_slugs": sorted(
+                {brand_by_key[row["brand_key"]]["slug"] for row in rows if row["brand_key"]}
+            ),
         }
         _rate_fields(category)
         categories.append(category)
@@ -316,6 +314,7 @@ def build_schema_reports(
             "poi_count": len(assessed),
             "brand_count": len(brands),
             "category_count": len(categories),
+            "unbranded_pois": sum(not row["brand_key"] for row in assessed),
             "nsi_matched_pois": sum(row["resolution"] == "nsi_id" for row in assessed),
             "nsi_match_rate": percentage(sum(row["resolution"] == "nsi_id" for row in assessed), len(assessed)),
             "schema_required_checks": total_required,
