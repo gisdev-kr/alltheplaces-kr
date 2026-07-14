@@ -1,0 +1,45 @@
+- build_id: latest-geojson
+  scope: 전체 데이터
+  format: GeoJSON
+  path: /map/data/latest/pois.geojson
+  available: true
+  notes: 지도 및 GIS 소프트웨어용 FeatureCollection
+
+- build_id: latest-csv
+  scope: 전체 데이터
+  format: CSV
+  path: /map/data/latest/pois.csv
+  available: true
+  notes: 표 형식 분석과 스프레드시트용
+
+- build_id: latest-jsonl
+  scope: 전체 데이터
+  format: JSONL
+  path: /map/data/latest/pois.ndgeojson
+  available: true
+  notes: 한 줄에 한 POI를 담은 NDGeoJSON
+
+- build_id: latest-osm
+  scope: 전체 데이터
+  format: OSM XML
+  path: /map/data/latest/pois.osm
+  available: true
+  notes: 수동 검토용이며 자동 import 파일이 아님
+
+- build_id: convenience-csv
+  scope: shop/convenience
+  format: CSV
+  available: false
+  notes: category 단위 export 준비 중
+
+- build_id: cafe-geojson
+  scope: amenity/cafe
+  format: GeoJSON
+  available: false
+  notes: category 단위 export 준비 중
+
+- build_id: all-parquet
+  scope: 전체 데이터
+  format: Parquet
+  available: false
+  notes: 분석용 columnar export 준비 중

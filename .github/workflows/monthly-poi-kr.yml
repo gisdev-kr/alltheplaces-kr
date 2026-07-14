@@ -18,6 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 180
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/portal/Gemfile
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,6 +58,18 @@ jobs:
           cache-dependency-path: web/pnpm-lock.yaml
       - run: pnpm --dir web install --frozen-lockfile
       - run: pnpm --dir web build
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - name: Build Jekyll data portal
+        run: |
+          cp web/public/data/latest/metadata.json portal/_data/alltheplaces/runtime.json
+          bundle exec jekyll build --source portal --destination portal/_site
+      - name: Add interactive map to portal
+        run: |
+          mkdir -p portal/_site/map
+          cp -R web/dist/. portal/_site/map/
       - uses: actions/upload-artifact@v4
         with:
           name: monthly-dist
@@ -64,7 +78,7 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: web/dist
+          path: portal/_site
   deploy:
     environment:
       name: github-pages

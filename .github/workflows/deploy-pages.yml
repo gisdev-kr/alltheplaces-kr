@@ -3,7 +3,9 @@ name: Deploy portal UI
 on:
   push:
     branches: [main]
-    paths: ["web/**", ".github/workflows/deploy-pages.yml"]
+    paths: ["web/**", "portal/**", ".github/workflows/deploy-pages.yml"]
+  pull_request:
+    paths: ["web/**", "portal/**", ".github/workflows/deploy-pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -19,6 +21,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/portal/Gemfile
     steps:
       - uses: actions/checkout@v4
       - name: Restore newest monthly data when available
@@ -41,11 +45,24 @@ jobs:
           cache-dependency-path: web/pnpm-lock.yaml
       - run: pnpm --dir web install --frozen-lockfile
       - run: pnpm --dir web build
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - name: Build Jekyll data portal
+        run: |
+          cp web/public/data/latest/metadata.json portal/_data/alltheplaces/runtime.json
+          bundle exec jekyll build --source portal --destination portal/_site
+      - name: Add interactive map to portal
+        run: |
+          mkdir -p portal/_site/map
+          cp -R web/dist/. portal/_site/map/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: web/dist
+          path: portal/_site
   deploy:
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
