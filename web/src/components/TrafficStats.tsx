@@ -5,8 +5,9 @@ const GOATCOUNTER_CODE = "gisdev-kr";
 async function count(path: string): Promise<string> {
   const url = `https://${GOATCOUNTER_CODE}.goatcounter.com/counter/${encodeURIComponent(path)}.json`;
   const response = await fetch(url, {cache: "no-store"});
-  if (!response.ok) throw new Error(`GoatCounter ${response.status}`);
   const data = await response.json() as {count?: string};
+  if (response.status === 404) return data.count || "0";
+  if (!response.ok) throw new Error(`GoatCounter ${response.status}`);
   return data.count || "—";
 }
 
